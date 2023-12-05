@@ -72,6 +72,7 @@ for thread in gpt.threads:
 # > What is the capital of France?
 # Assistant:
 # > The capital of France is Paris.
+
 # Thread thread_2:
 # Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?
 # ...
@@ -79,6 +80,7 @@ for thread in gpt.threads:
 # > What is the capital of Italy?
 # Assistant:
 # > The capital of Italy is Rome.
+
 # Thread thread_3:
 # Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?
 # ...
