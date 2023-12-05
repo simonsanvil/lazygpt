@@ -55,6 +55,8 @@ for i, country in enumerate(countries):
         # this will create a new conversation in a different thread
         # forked from the main thread (thread_id=0)
         gpt(f"What is the capital of {country}?", role="user")
+        gpt("Thank you.", role="user", model=None)
+        # setting model=None will not trigger a response from the model
     
 await gpt.evaluate_async()
 # all 5 threads will be evaluated and sent to the API simultaneously (asynchronously)
@@ -72,6 +74,8 @@ for thread in gpt.threads:
 # > What is the capital of France?
 # Assistant:
 # > The capital of France is Paris.
+# User:
+# > Thank you.
 
 # Thread thread_2:
 # Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?
@@ -80,6 +84,8 @@ for thread in gpt.threads:
 # > What is the capital of Italy?
 # Assistant:
 # > The capital of Italy is Rome.
+# User:
+# > Thank you.
 
 # Thread thread_3:
 # Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?
@@ -88,4 +94,6 @@ for thread in gpt.threads:
 # > What is the capital of Germany?
 # Assistant:
 # > The capital of Germany is Berlin.
+# User:
+# > Thank you.
 ```
