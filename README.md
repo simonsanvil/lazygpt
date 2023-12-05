@@ -1,6 +1,6 @@
 # chatlm
 
-Use OpenAI's API to generate chat responses lazily and asynchronously and control different threads of conversation with ease.
+Use LLMs to generate chat responses lazily and asynchronously and control different threads of conversation with ease.
 
 ## Installation
 
@@ -12,6 +12,7 @@ pip install chatlm
 
 ```python
 from chatlm.models.openai import GPT
+# at the moment only OpenAI's GPT using the API is supported
 
 gpt = GPT(temperature=0.9, max_tokens=100, chat=True, lazy=True, async_=True)
 
