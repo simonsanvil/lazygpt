@@ -1,11 +1,11 @@
-# chatlm
+# lazyGPT
 
 Use LLMs to generate chat responses lazily and asynchronously and control different threads of conversation with ease.
 
 ## Installation
 
 ```bash
-pip install chatlm
+pip install git+https://github.com/simonsanvil/lazygpt.git                 
 ```
 
 ## Usage
@@ -13,16 +13,16 @@ pip install chatlm
 Make lazy evaluations of chat responses:
 
 ```python
-from chatlm.models.openai import GPT
-# at the moment only OpenAI's GPT using the API is supported
+from lazygpt import GPT
 
-gpt = GPT(temperature=0.9, max_tokens=100, chat=True, lazy=True, async_=True)
+gpt = GPT(model="gpt-4o", chat=True, async_=True, temperature=0.9)
 
 with gpt.lazy():
+    # The response to all of these won't be evaluated until a call to gpt.evaluate() is made
     gpt("Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?", role="user")
     gpt("What is the capital of Spain?", role="user")
 
-print(gpt.threads[0]) # by default the first thread is the main thread
+print(gpt.threads[0]) # by default the first thread is the main conversation thread
 # User:
 # > Hello, I will give you a series of questions and you must answer them with honesty and sincerity. Understood?
 # Assistant:
@@ -32,8 +32,7 @@ print(gpt.threads[0]) # by default the first thread is the main thread
 # Assistant:
 # > [LAZY EVALUATION - Not yet evaluated]
 
-await gpt.evaluate_async() 
-# this will evaluate all lazy evaluations asynchronously
+await gpt.evaluate_async()  # this will evaluate all lazy evaluations.
 
 print(gpt.threads[0])
 # User:
@@ -46,7 +45,8 @@ print(gpt.threads[0])
 # > The capital of Spain is Madrid.
 ```
 
-Simultaneous evaluations of multiple threads will be handled automatically:
+The evaluations are done sequentially for each individual conversation thread and in parallel for different threads. 
+Here's another example illustrating that:
 
 ```python
 countries = ["France", "Italy", "Germany"]
@@ -59,10 +59,11 @@ for i, country in enumerate(countries):
         # setting model=None will not trigger a response from the model
     
 await gpt.evaluate_async()
-# all 5 threads will be evaluated and sent to the API simultaneously (asynchronously)
+# Since the messages to evaluate are all in different threads, 
+# they will all be sent to the API simultaneously
 
 for thread in gpt.threads:
-    if thread==0:
+    if thread==0: # don't print the main thread
         continue
     print(f"Thread {thread.thread_id}:")
     print(thread)
